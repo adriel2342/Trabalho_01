@@ -103,6 +103,8 @@ def visualizar_ativo(ativos):
         
 
 def editar_remover_ativo(ativos):
+    print("=== ESSES SAO OS IDS CADASTRADOS ===")
+    id_ativo_mostrar(ativos)
     ativo = buscar_ativo(ativos, input("INSIRA O id OU O nome do ativo: " ).strip())
     if ativo is None:
         print("=== ATIVO NAO LOCALIZADO ===")
@@ -152,6 +154,8 @@ def editar_remover_ativo(ativos):
         
         
 def cadastrar_vuln(ativos):
+    print("=== ESSES SÃO OS IDS CADASTRADOS ===")
+    id_ativo_mostrar(ativos)
     ativo = buscar_ativo(ativos, input("ID ou hostname do ativo: ").strip())
     if ativo is None:
         print("Ativo não encontrado.")
@@ -198,6 +202,8 @@ def cadastrar_vuln(ativos):
         print("=== RESPONDA COM s/n ===")
 
 def visualizar_vuln(ativos):
+    print("=== ESSES SAO OS IDS CADASTRADOS ===")
+    id_ativo_mostrar(ativos)
     ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
     if buscar_ativo is None:
         print("=== ATIVO NAO ENCONTRADO ===")
@@ -212,6 +218,8 @@ def visualizar_vuln(ativos):
         numero += 1
 
 def editar_remover_vuln(ativos):
+    print("=== ESSES SAO OS IDS CADASTRADO===")
+    id_ativo_mostrar(ativos)
     ativo = buscar_ativo( ativos, input("=== DIGITE O ID DO ATIVO: ").strip())
     if buscar_ativo is None:
         print("ATIVO NAO ENCONTRADO")
