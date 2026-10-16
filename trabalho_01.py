@@ -5,7 +5,12 @@ ARQUIVOS_DADOS = Path(__file__).resolve().parent /"ativos.json"
 
 TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
 SEVERIDADE =["baixa", "media", "alta", "critica"]
+<<<<<<< HEAD
 STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"] 
+=======
+STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"]
+CATEGORIAS_VULN = ["rede","software","hardware", "CONFIGURACAO  "] 
+>>>>>>> feature-confirmacao
 
 
 def salvar_ativo(ativos):
@@ -30,6 +35,10 @@ def buscar_ativo(ativos, busca):
     print("=== ATIVO NAO ENCONTRADO ===")
     return None
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> feature-confirmacao
 def cadastrar_ativo(ativos):
     id_ativo = input("ADICIONE UM ID PARA O ATIVO: ").strip()
     for ativo in ativos:
@@ -37,7 +46,6 @@ def cadastrar_ativo(ativos):
             print("=== ID PREVIAMENTE CADASTRADO ===")
             return
 
-        
     nome = input("CADASTRE O HOSTNAME DO ATIVO: ").strip()
     responsavel = input ("CADASTRE O RESPONSAVEL PELO ATIVO: ")
     ip_ativo = input("CADASTRE O IP DO ATIVO: ")
@@ -111,19 +119,35 @@ def editar_remover_ativo(ativos):
             return
         if opcao == "1":
             if novo_valor == ativo["nome"]:
+<<<<<<< HEAD
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo ["nome"] = novo_valor
         elif opcao == "2":
             if novo_valor == ativo["responsavel"]:
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+=======
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["nome"] = novo_valor
+        
+        elif opcao == "2":
+            if novo_valor == ativo["responsavel"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+>>>>>>> feature-confirmacao
             else:
                 ativo ["responsavel"] = novo_valor
         elif opcao == "3":
             if novo_valor == ativo["ip"]:
+<<<<<<< HEAD
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo["ip"] = novo_valor
+=======
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo["id"] = novo_valor
+>>>>>>> feature-confirmacao
         elif opcao == "4":
            if novo_valor not in TIPOS_ATIVOS:
                 print("=== TIPO INVÁLIDO ===")
@@ -151,6 +175,12 @@ def cadastrar_vuln(ativos):
 
     descricao = input("Descrição: ").strip()
     categoria = input("Categoria: ").strip()
+<<<<<<< HEAD
+=======
+    if categoria not in CATEGORIAS_VULN:
+        print("=== CATEGORIA ERRADA ===")
+        return
+>>>>>>> feature-confirmacao
     severidade = input("Severidade (baixa, média, alta, crítica): ").strip().lower()
     status = input("Status (aberta, em tratamento, corrigida, risco aceito): ").strip().lower()
 
@@ -160,6 +190,7 @@ def cadastrar_vuln(ativos):
     if severidade not in SEVERIDADE or status not in STATUS:
         print("Severidade ou status inválido.")
         return
+<<<<<<< HEAD
 
     ativo  ["vulnerabilidades"].append({
         "descricao": descricao, "categoria": categoria,
@@ -167,6 +198,33 @@ def cadastrar_vuln(ativos):
     })
     salvar_ativo(ativos)
     print("=== VULNERABILIDADE CADASTRADA ===.")
+=======
+    
+    print("=== CONFIRMACAO ===")
+    print(f"A descricao: {descricao} esta correta?")
+    print(f"A categoria: {categoria} esta correta?")
+    print(f"A severidade: {severidade} esta correta?")
+    print(f"O status: {status} esta correto?")
+    confirmacao = input("=== RESPONDA COM s/n: ").strip().lower()
+    
+    if confirmacao == "s" or confirmacao ==  "sim":
+
+        ativo  ["vulnerabilidades"].append({
+            "descricao": descricao, 
+            "categoria": categoria,
+            "severidade": severidade, 
+            "status": status
+
+        })
+        salvar_ativo(ativos)
+        print("=== VULNERABILIDADE CADASTRADA ===.")
+
+    elif confirmacao == "n" or confirmacao == "nao":
+        print("=== CADASTRE NOVAMENTE ===")
+        return
+    else:
+        print("=== RESPONDA COM s/n ===")
+>>>>>>> feature-confirmacao
 
 def visualizar_vuln(ativos):
     ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
@@ -220,8 +278,14 @@ def editar_remover_vuln(ativos):
                 vuln ["descricao"] = novo_valor
 
         elif opcao == "2":
+<<<<<<< HEAD
             if novo_valor .lower() not in TIPOS_ATIVOS:
                 print("=== CATEGORIA INVÁLIDA ===")
+=======
+            if novo_valor .lower() not in CATEGORIAS_VULN:
+                print("=== CATEGORIA INVÁLIDA ===")
+                return
+>>>>>>> feature-confirmacao
             if novo_valor ==  vuln["categoria"]:
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
             else:
@@ -261,7 +325,7 @@ def Interface_menu (ativos):
         print(" ===        EDITAR / REMOVER ATIVOS     === (3)")
         print(" ===       CADASTRAR VULNERABILIDADES   === (4)")
         print(" ===      VISUALIZAR VULNERABILIDADES   === (5)")
-        print(" ===  EDITAR / REMOVER VULNERABILIDADES === (6)")
+        print(" ===    EDITAR/REMOVER VULNERABILIDADES === (6)")
         print(" ===                  SAIR              === (0)")
 
         #parte relacionada ao menu interativo que o usuário terá 
@@ -289,8 +353,3 @@ Interface_menu(ativos)
 
 
 # DISCLAMER: esse código foi feito com o auxílio de inteligencia artificial(gemini, e chatgpt) foram utilizadas como forma de aprendizado e estudo, o código nao foi feito totalmente e nem copiado pela ia, e sim utilizada como auxílio na formaçao do código.
-
-          
-
-
-
