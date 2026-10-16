@@ -16,7 +16,7 @@ def carregar_ativos():
     if not ARQUIVOS_DADOS.exists():
         salvar_ativo([])
         return
-    with open (ARQUIVOS_DADOS, "r", enconding= "utf-8") as arquivo:
+    with open (ARQUIVOS_DADOS, "r", encoding= "utf-8") as arquivo:
         return json.load(arquivo)
     
 # área relacionada a busca de algum ativo   
@@ -26,6 +26,7 @@ def buscar_ativo(ativos, busca):
         if str(ativo["id"]) == busca or ativo["nome"].lower() == busca.lower():
             return ativo
     return None
+
     
 def cadastrar_ativo(ativos):
     id_ativo = input("ADICIONE UM ID PARA O ATIVO: ").strip()
@@ -87,7 +88,7 @@ def visualizar_ativo(ativos):
         print("=== NAO HA ATIVOS CADASTRADOS ===")
     for ativo in ativos:
         print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", ativo["tipo"])
-        print("Responsável:", ativo["responsavel"], "| Localização:", ativo["localizacao"])
+        print("Responsável:", ativo["responsavel"], "| ip:", ativo["ip"])
         
 
 def editar_remover_ativo(ativos):
@@ -96,7 +97,7 @@ def editar_remover_ativo(ativos):
         print("=== ATIVO NAO LOCALIZADO ===")
         return
     
-    print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar localização")
+    print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar ip")
     print("4 - Alterar tipo | 5 - Remover ativo")
     opcao = input("SELECIONE UM DOS NUMEROS ACIMA: ")
     if opcao in ["1", "2", "3","4"]:
@@ -105,11 +106,21 @@ def editar_remover_ativo(ativos):
             print("=== ESSE CAMPO NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            ativo ["nome"] = novo_valor
+            if novo_valor == ativo["nome"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["nome"] = novo_valor
+        
         elif opcao == "2":
-            ativo ["responsavel"] = novo_valor
+            if novo_valor == ativo["responsavel"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["responsavel"] = novo_valor
         elif opcao == "3":
-            ativo["localizacao"] = novo_valor
+            if novo_valor == ativo["ip"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo["id"] = novo_valor
         elif opcao == "4":
            if novo_valor not in TIPOS_ATIVOS:
                 print("=== TIPO INVÁLIDO ===")

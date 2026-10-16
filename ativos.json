@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "ativo": [],
+        "id": "1",
+        "nome": "SERVIDOR-WEB-01",
+        "responsavel": "adriel",
+        "ip": "192.0.2.1",
+        "tipo": "servidor Web",
+        "vulnerabilidades": []
+    }
+]
