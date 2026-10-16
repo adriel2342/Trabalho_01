@@ -6,6 +6,13 @@
         "responsavel": "ADRIEL",
         "ip": "192.168.100.1",
         "tipo": "roteador",
-        "vulnerabilidades": []
+        "vulnerabilidades": [
+            {
+                "descricao": "rotweador com firewall desuatualizado",
+                "categoria": "roteador",
+                "severidade": "alta",
+                "status": "aberta"
+            }
+        ]
     }
 ]

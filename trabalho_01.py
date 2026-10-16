@@ -110,11 +110,20 @@ def editar_remover_ativo(ativos):
             print("=== ESSE CAMPO NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            ativo ["nome"] = novo_valor
+            if novo_valor == ativo["nome"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["nome"] = novo_valor
         elif opcao == "2":
-            ativo ["responsavel"] = novo_valor
+            if novo_valor == ativo["responsavel"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["responsavel"] = novo_valor
         elif opcao == "3":
-            ativo["ip"] = novo_valor
+            if novo_valor == ativo["ip"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo["ip"] = novo_valor
         elif opcao == "4":
            if novo_valor not in TIPOS_ATIVOS:
                 print("=== TIPO INVÁLIDO ===")
@@ -204,10 +213,19 @@ def editar_remover_vuln(ativos):
             print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            vuln ["descricao"] = novo_valor
+            if novo_valor == vuln["descricao"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+                return
+            else:
+                vuln ["descricao"] = novo_valor
 
         elif opcao == "2":
-            vuln ["categoria"] = novo_valor
+            if novo_valor .lower() not in TIPOS_ATIVOS:
+                print("=== CATEGORIA INVÁLIDA ===")
+            if novo_valor ==  vuln["categoria"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                vuln ["categoria"] = novo_valor
 
         elif opcao == "3":
             
