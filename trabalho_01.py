@@ -3,9 +3,9 @@ from pathlib import Path
 
 ARQUIVOS_DADOS = Path(__file__).resolve().parent /"ativos.json"
 
-TIPOS_ATIVOS = ["Notebook, Roteador, Servidor Web, Impressora"]
-SEVERIDADE =["baixa, media, alta, critica"]
-STATUS = ["Aberta, Em tratamento, Corrigida, Risco aceito"] 
+TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
+SEVERIDADE =["baixa", "media", "alta", "critica"]
+STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"] 
 
 
 def salvar_ativo(ativos):
@@ -21,10 +21,13 @@ def carregar_ativos():
     
 # área relacionada a busca de algum ativo   
     
+
 def buscar_ativo(ativos, busca):
     for ativo in ativos:
         if str(ativo["id"]) == busca or ativo["nome"].lower() == busca.lower():
             return ativo
+
+    print("=== ATIVO NAO ENCONTRADO ===")
     return None
 
     
@@ -61,11 +64,13 @@ def cadastrar_ativo(ativos):
     if confirmacao == "sim" or confirmacao == "s":
         #parte para salvar no arquivo json
         ativo ={
+            "ativo": [],
             "id": id_ativo,
             "nome": nome,
             "responsavel" : responsavel,
             "ip" : ip_ativo,
-            "tipo" : tipo
+            "tipo" : tipo,
+            "vulnerabilidades": []
 
         }
         ativos.append(ativo) 
@@ -141,35 +146,114 @@ def editar_remover_ativo(ativos):
         
         
 def cadastrar_vuln(ativos):
-    ativo = buscar_ativo(ativos,input("id OU nome DO ATIVO: ").strip())
+    ativo = buscar_ativo(ativos, input("ID ou hostname do ativo: ").strip())
     if ativo is None:
-        print("=== ATIVO NAO LOCALIZADO ===")
+        print("Ativo não encontrado.")
         return
-    descricao = input("=== DESCRIÇA0: ")
-    categoria = input("=== CATEGORIA: ")
-    severidade = input ("=== SEVERIDADE (baixa, média, altaa, crítica):  ").strip().lower()
-    status = input("=== STATUS (aberta, em tratamento, corrigida, risco aceito)").strip().lower()
+
+    descricao = input("Descrição: ").strip()
+    categoria = input("Categoria: ").strip()
+    severidade = input("Severidade (baixa, média, alta, crítica): ").strip().lower()
+    status = input("Status (aberta, em tratamento, corrigida, risco aceito): ").strip().lower()
+
     if not descricao or not categoria:
-        print("=== OS CAMPOS NAO PODEM FICAR VAZIOS ===")
+        print("Descrição e categoria não podem ficar vazias.")
         return
     if severidade not in SEVERIDADE or status not in STATUS:
-        print("=== CATEGORIA DE VULNERABILIDADE E STATUS INVÁLIDA ===")
-        return 
-    ativo["vulnerabilidades"].append({
-        "descricao": descricao,
-        "categoria": categoria,
-        "severidade": severidade,
-        "status": status,
+        print("Severidade ou status inválido.")
+        return
+
+    ativo  ["vulnerabilidades"].append({
+        "descricao": descricao, "categoria": categoria,
+        "severidade": severidade, "status": status
     })
-
-    
-
+    salvar_ativo(ativos)
+    print("=== VULNERABILIDADE CADASTRADA ===.")
 
 def visualizar_vuln(ativos):
-    pass
+    ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
+    if buscar_ativo is None:
+        print("=== ATIVO NAO ENCONTRADO ===")
+        return
+    if not ativo["vulnerabilidades"]:
+        print("=== ESSE ATIVO NÃO POSSUI VULNERABILIDADES ===")
+        return
+    numero = 1
+    for vuln in ativo["vulnerabilidades"]:
+        print("Vulnerabilidade", numero, "-", vuln["descricao"])
+        print("Categoria:", vuln["categoria"], "| Severidade:", vuln["severidade"], "| Status:", vuln["status"])
+        numero += 1
 
 def editar_remover_vuln(ativos):
-    pass
+    ativo = buscar_ativo( ativos, input("=== DIGITE O ID DO ATIVO: ").strip())
+    if buscar_ativo is None:
+        print("ATIVO NAO ENCONTRADO")
+        return
+    if ativo is None:
+        return
+    vulnerabilidades = ativo["vulnerabilidades"]
+    if not vulnerabilidades:
+        print("=== NAO HA VULNERABILIDADES REFERENTES A ESSE ATIVO ===")
+        return
+    numero = 1
+    for vuln in vulnerabilidades:
+        print(numero, "-", vuln["descricao"])
+        numero += 1
+        numero = int(input("Número da vulnerabilidade: ").strip())
+    if numero < 1 or numero > len(vulnerabilidades):
+        print("Número inválido.")
+        return
+    vuln = vulnerabilidades[numero - 1] 
+
+    print("1 - Alterar descrição | 2 - Alterar categoria")
+    print("3 - Alterar severidade | 4 - Alterar status | 5 - Remover")
+    opcao = input("Escolha: ").strip()
+
+    if opcao in ["1", "2", "3", "4"]: 
+        novo_valor = input("=== NOVO VALOR: ").strip()
+        if not novo_valor:
+            print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
+            return
+        if opcao == "1":
+            if novo_valor == vuln["descricao"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+                return
+            else:
+                vuln ["descricao"] = novo_valor
+
+        elif opcao == "2":
+            if novo_valor .lower() not in TIPOS_ATIVOS:
+                print("=== CATEGORIA INVÁLIDA ===")
+            if novo_valor ==  vuln["categoria"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                vuln ["categoria"] = novo_valor
+
+        elif opcao == "3":
+            
+            if novo_valor .lower() not in SEVERIDADE:
+                print("=== SEVERIDADE INVALIDA ===")
+                return
+            vuln["severidade"] = novo_valor
+
+        elif opcao == "4":
+            
+            if novo_valor .lower() not in STATUS:
+                print("=== STATUS INVALIDO ===")
+                return
+            vuln ["status"] = novo_valor
+        salvar_ativo(ativos)
+        print ("=== VULNERABILIDADE MODIFICADA ===")
+
+    elif opcao == "5":
+        if input("=== CONFIRMA A REMOCAO? (s/n): ").strip().lower() == "s":
+            vulnerabilidades.remove(vuln)
+            print("=== VULNERABILIDADE REMOVIDA ===")
+        else:
+            print("=== REMOCAO CANCELADA ===")
+    else: 
+        print("=== OPCAO INVALIDA ===")
+            
 
 #opcoes mostradas do que o usuario tera    
 def Interface_menu (ativos):
@@ -180,7 +264,7 @@ def Interface_menu (ativos):
         print(" ===       CADASTRAR VULNERABILIDADES   === (4)")
         print(" ===      VISUALIZAR VULNERABILIDADES   === (5)")
         print(" ===  EDITAR / REMOVER VULNERABILIDADES === (6)")
-        print(" ===                  SAIR              === (0)")
+        print(" ====                 SAIR              ==== (0)")
 
         #parte relacionada ao menu interativo que o usuário terá 
         escolha_usuario = input("Selecione uma das opções acima: ")
@@ -197,7 +281,7 @@ def Interface_menu (ativos):
         elif escolha_usuario == "6":
             editar_remover_vuln (ativos)
         elif escolha_usuario == "0":
-            print("PROGRAMA ENCERRADO")
+            print("=== PROGRAMA ENCERRADO ===")
             break
         else:
             print("opcao invalida selecione de 0 a 6")
