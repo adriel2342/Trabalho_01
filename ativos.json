@@ -1,1 +1,27 @@
-[]
+[
+    {
+        "ativo": [],
+        "id": "1",
+        "nome": "PC-LABORATORIO-01",
+        "responsavel": "ADRIEL",
+        "ip": "192.168.100.10",
+        "tipo": "notebook",
+        "vulnerabilidades": [
+            {
+                "descricao": "software desuatualizado",
+                "categoria": "notebook",
+                "severidade": "baixa",
+                "status": "risco aceito"
+            }
+        ]
+    },
+    {
+        "ativo": [],
+        "id": "2",
+        "nome": "roteador-laboratorio-01",
+        "responsavel": "ADRIEL",
+        "ip": "192.168.100.1",
+        "tipo": "roteador",
+        "vulnerabilidades": []
+    }
+]
