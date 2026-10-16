@@ -3,9 +3,9 @@ from pathlib import Path
 
 ARQUIVOS_DADOS = Path(__file__).resolve().parent /"ativos.json"
 
-TIPOS_ATIVOS = ["Notebook, Roteador, Servidor Web, Impressora"]
-SEVERIDADE =["baixa, media, alta, critica"]
-STATUS = ["Aberta, Em tratamento, Corrigida, Risco aceito"] 
+TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
+SEVERIDADE =["baixa", "media", "alta", "critica"]
+STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"] 
 
 
 def salvar_ativo(ativos):
@@ -16,7 +16,7 @@ def carregar_ativos():
     if not ARQUIVOS_DADOS.exists():
         salvar_ativo([])
         return
-    with open (ARQUIVOS_DADOS, "r", enconding= "utf-8") as arquivo:
+    with open (ARQUIVOS_DADOS, "r", encoding= "utf-8") as arquivo:
         return json.load(arquivo)
     
 # área relacionada a busca de algum ativo   
@@ -60,11 +60,13 @@ def cadastrar_ativo(ativos):
     if confirmacao == "sim" or confirmacao == "s":
         #parte para salvar no arquivo json
         ativo ={
+            "ativo": [],
             "id": id_ativo,
             "nome": nome,
             "responsavel" : responsavel,
             "ip" : ip_ativo,
-            "tipo" : tipo
+            "tipo" : tipo,
+            "vulnerabilidades": []
 
         }
         ativos.append(ativo) 
@@ -130,35 +132,50 @@ def editar_remover_ativo(ativos):
         
         
 def cadastrar_vuln(ativos):
-    ativo = buscar_ativo(ativos,input("id OU nome DO ATIVO: ").strip())
+    ativo = buscar_ativo(ativos, input("ID ou hostname do ativo: ").strip())
     if ativo is None:
-        print("=== ATIVO NAO LOCALIZADO ===")
+        print("Ativo não encontrado.")
         return
-    descricao = input("=== DESCRIÇA0: ")
-    categoria = input("=== CATEGORIA: ")
-    severidade = input ("=== SEVERIDADE (baixa, média, altaa, crítica):  ").strip().lower()
-    status = input("=== STATUS (aberta, em tratamento, corrigida, risco aceito)").strip().lower()
+
+    descricao = input("Descrição: ").strip()
+    categoria = input("Categoria: ").strip()
+    severidade = input("Severidade (baixa, média, alta, crítica): ").strip().lower()
+    status = input("Status (aberta, em tratamento, corrigida, risco aceito): ").strip().lower()
+
     if not descricao or not categoria:
-        print("=== OS CAMPOS NAO PODEM FICAR VAZIOS ===")
+        print("Descrição e categoria não podem ficar vazias.")
         return
     if severidade not in SEVERIDADE or status not in STATUS:
-        print("=== CATEGORIA DE VULNERABILIDADE E STATUS INVÁLIDA ===")
-        return 
-    ativo["vulnerabilidades"].append({
-        "descricao": descricao,
-        "categoria": categoria,
-        "severidade": severidade,
-        "status": status,
+        print("Severidade ou status inválido.")
+        return
+
+    ativo  ["vulnerabilidades"].append({
+        "descricao": descricao, "categoria": categoria,
+        "severidade": severidade, "status": status
     })
-
-    
-
+    salvar_ativo(ativos)
+    print("=== VULNERABILIDADE CADASTRADA ===.")
 
 def visualizar_vuln(ativos):
-    pass
+    ativo = buscar_ativo(input("=== DIGITE O ID DO ATIVO:  ").strip())
+    if buscar_ativo is None:
+        print("=== ATIVO NAO ENCONTRADO ===")
+        return
+    if not ativo["vulnerabilidades"]:
+        print("=== ESSE ATIVO NÃO POSSUI VULNERABILIDADES ===")
+        return
+    numero = 1
+    for vuln in ativo["vulnerabilidades"]:
+        print("\nVulnerabilidade", numero, "-", vuln["descricao"])
+        print("Categoria:", vuln["categoria"], "| Severidade:", vuln["severidade"], "| Status:", vuln["status"])
+        numero += 1
 
 def editar_remover_vuln(ativos):
-    pass
+    ativo = buscar_ativo(input("=== DIGITE O ID DO ATIVO: ").strip())
+    if buscar_ativo is None:
+        print("ATIVO NAO ENCONTRADO")
+        return
+    if not 
 
 #opcoes mostradas do que o usuario tera    
 def Interface_menu (ativos):
@@ -186,7 +203,7 @@ def Interface_menu (ativos):
         elif escolha_usuario == "6":
             editar_remover_vuln (ativos)
         elif escolha_usuario == "0":
-            print("PROGRAMA ENCERRADO")
+            print("=== PROGRAMA ENCERRADO ===")
             break
         else:
             print("opcao invalida selecione de 0 a 6")
