@@ -5,7 +5,8 @@ ARQUIVOS_DADOS = Path(__file__).resolve().parent /"ativos.json"
 
 TIPOS_ATIVOS = ["notebook" , "roteador", "servidor Web", "impressora"]
 SEVERIDADE =["baixa", "media", "alta", "critica"]
-STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"] 
+STATUS = ["aberta", "em tratamento", "corrigida", "risco aceito"]
+CATEGORIAS_VULN = ["rede","software","hardware", "CONFIGURACAO  "] 
 
 
 def salvar_ativo(ativos):
@@ -21,20 +22,29 @@ def carregar_ativos():
     
 # área relacionada a busca de algum ativo   
     
+
 def buscar_ativo(ativos, busca):
     for ativo in ativos:
         if str(ativo["id"]) == busca or ativo["nome"].lower() == busca.lower():
             return ativo
+
+    print("=== ATIVO NAO ENCONTRADO ===")
     return None
+
+def id_ativo_mostrar(ativos):
+    for ativo in ativos:
+        print("ID", ativo ["id"], "NOME", ativo["nome"])
+
     
 def cadastrar_ativo(ativos):
+    print("=== ESSES SAO OS IDS CADASTRADOS ===")
+    id_ativo_mostrar(ativos)
     id_ativo = input("ADICIONE UM ID PARA O ATIVO: ").strip()
     for ativo in ativos:
         if ativo ["id"] == id_ativo:
             print("=== ID PREVIAMENTE CADASTRADO ===")
             return
 
-        
     nome = input("CADASTRE O HOSTNAME DO ATIVO: ").strip()
     responsavel = input ("CADASTRE O RESPONSAVEL PELO ATIVO: ")
     ip_ativo = input("CADASTRE O IP DO ATIVO: ")
@@ -89,7 +99,7 @@ def visualizar_ativo(ativos):
         print("=== NAO HA ATIVOS CADASTRADOS ===")
     for ativo in ativos:
         print("\nID:", ativo["id"], "| Nome:", ativo["nome"], "| Tipo:", ativo["tipo"])
-        print("Responsável:", ativo["responsavel"], "| Localização:", ativo["localizacao"])
+        print("Responsável:", ativo["responsavel"], "| ip:", ativo["ip"])
         
 
 def editar_remover_ativo(ativos):
@@ -98,7 +108,7 @@ def editar_remover_ativo(ativos):
         print("=== ATIVO NAO LOCALIZADO ===")
         return
     
-    print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar localização")
+    print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar ip")
     print("4 - Alterar tipo | 5 - Remover ativo")
     opcao = input("SELECIONE UM DOS NUMEROS ACIMA: ")
     if opcao in ["1", "2", "3","4"]:
@@ -107,11 +117,21 @@ def editar_remover_ativo(ativos):
             print("=== ESSE CAMPO NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            ativo ["nome"] = novo_valor
+            if novo_valor == ativo["nome"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["nome"] = novo_valor
+        
         elif opcao == "2":
-            ativo ["responsavel"] = novo_valor
+            if novo_valor == ativo["responsavel"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo ["responsavel"] = novo_valor
         elif opcao == "3":
-            ativo["localizacao"] = novo_valor
+            if novo_valor == ativo["ip"]:
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                ativo["id"] = novo_valor
         elif opcao == "4":
            if novo_valor not in TIPOS_ATIVOS:
                 print("=== TIPO INVÁLIDO ===")
@@ -139,6 +159,9 @@ def cadastrar_vuln(ativos):
 
     descricao = input("Descrição: ").strip()
     categoria = input("Categoria: ").strip()
+    if categoria not in CATEGORIAS_VULN:
+        print("=== CATEGORIA ERRADA ===")
+        return
     severidade = input("Severidade (baixa, média, alta, crítica): ").strip().lower()
     status = input("Status (aberta, em tratamento, corrigida, risco aceito): ").strip().lower()
 
@@ -148,13 +171,31 @@ def cadastrar_vuln(ativos):
     if severidade not in SEVERIDADE or status not in STATUS:
         print("Severidade ou status inválido.")
         return
+    
+    print("=== CONFIRMACAO ===")
+    print(f"A descricao: {descricao} esta correta?")
+    print(f"A categoria: {categoria} esta correta?")
+    print(f"A severidade: {severidade} esta correta?")
+    print(f"O status: {status} esta correto?")
+    confirmacao = input("=== RESPONDA COM s/n: ").strip().lower()
+    
+    if confirmacao == "s" or confirmacao ==  "sim":
 
-    ativo  ["vulnerabilidades"].append({
-        "descricao": descricao, "categoria": categoria,
-        "severidade": severidade, "status": status
-    })
-    salvar_ativo(ativos)
-    print("=== VULNERABILIDADE CADASTRADA ===.")
+        ativo  ["vulnerabilidades"].append({
+            "descricao": descricao, 
+            "categoria": categoria,
+            "severidade": severidade, 
+            "status": status
+
+        })
+        salvar_ativo(ativos)
+        print("=== VULNERABILIDADE CADASTRADA ===.")
+
+    elif confirmacao == "n" or confirmacao == "nao":
+        print("=== CADASTRE NOVAMENTE ===")
+        return
+    else:
+        print("=== RESPONDA COM s/n ===")
 
 def visualizar_vuln(ativos):
     ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
@@ -166,7 +207,7 @@ def visualizar_vuln(ativos):
         return
     numero = 1
     for vuln in ativo["vulnerabilidades"]:
-        print("\nVulnerabilidade", numero, "-", vuln["descricao"])
+        print("Vulnerabilidade", numero, "-", vuln["descricao"])
         print("Categoria:", vuln["categoria"], "| Severidade:", vuln["severidade"], "| Status:", vuln["status"])
         numero += 1
 
@@ -175,7 +216,9 @@ def editar_remover_vuln(ativos):
     if buscar_ativo is None:
         print("ATIVO NAO ENCONTRADO")
         return
-    vulnerabilidades = ativo["vulnerabilidade"]
+    if ativo is None:
+        return
+    vulnerabilidades = ativo["vulnerabilidades"]
     if not vulnerabilidades:
         print("=== NAO HA VULNERABILIDADES REFERENTES A ESSE ATIVO ===")
         return
@@ -183,7 +226,7 @@ def editar_remover_vuln(ativos):
     for vuln in vulnerabilidades:
         print(numero, "-", vuln["descricao"])
         numero += 1
-        numero = input("Número da vulnerabilidade: ")
+        numero = int(input("Número da vulnerabilidade: ").strip())
     if numero < 1 or numero > len(vulnerabilidades):
         print("Número inválido.")
         return
@@ -192,16 +235,27 @@ def editar_remover_vuln(ativos):
     print("1 - Alterar descrição | 2 - Alterar categoria")
     print("3 - Alterar severidade | 4 - Alterar status | 5 - Remover")
     opcao = input("Escolha: ").strip()
+
     if opcao in ["1", "2", "3", "4"]: 
         novo_valor = input("=== NOVO VALOR: ").strip()
         if not novo_valor:
             print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
             return
         if opcao == "1":
-            vuln ["descricao"] = novo_valor
+            if novo_valor == vuln["descricao"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+                return
+            else:
+                vuln ["descricao"] = novo_valor
 
         elif opcao == "2":
-            vuln ["categoria"] = novo_valor
+            if novo_valor .lower() not in CATEGORIAS_VULN:
+                print("=== CATEGORIA INVÁLIDA ===")
+                return
+            if novo_valor ==  vuln["categoria"]:
+                print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
+            else:
+                vuln ["categoria"] = novo_valor
 
         elif opcao == "3":
             
@@ -237,7 +291,7 @@ def Interface_menu (ativos):
         print(" ===        EDITAR / REMOVER ATIVOS     === (3)")
         print(" ===       CADASTRAR VULNERABILIDADES   === (4)")
         print(" ===      VISUALIZAR VULNERABILIDADES   === (5)")
-        print(" ===  EDITAR / REMOVER VULNERABILIDADES === (6)")
+        print(" ===    EDITAR/REMOVER VULNERABILIDADES === (6)")
         print(" ===                  SAIR              === (0)")
 
         #parte relacionada ao menu interativo que o usuário terá 
@@ -262,8 +316,4 @@ def Interface_menu (ativos):
 
 ativos = carregar_ativos()
 Interface_menu(ativos)
-
-
 # DISCLAMER: esse código foi feito com o auxílio de inteligencia artificial(gemini, e chatgpt) foram utilizadas como forma de aprendizado e estudo, o código nao foi feito totalmente e nem copiado pela ia, e sim utilizada como auxílio na formaçao do código.
-
-          

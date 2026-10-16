@@ -33,10 +33,11 @@ def buscar_ativo(ativos, busca):
 
 def id_ativo_mostrar(ativos):
     for ativo in ativos:
-         print("ID", ativo["id"], "NOME",ativo["nome"])
-   
+        print("ID", ativo ["id"], "NOME", ativo["nome"])
+
     
 def cadastrar_ativo(ativos):
+    print("=== ESSES SAO OS IDS CADASTRADOS ===")
     id_ativo_mostrar(ativos)
     id_ativo = input("ADICIONE UM ID PARA O ATIVO: ").strip()
     for ativo in ativos:
@@ -107,7 +108,7 @@ def editar_remover_ativo(ativos):
         print("=== ATIVO NAO LOCALIZADO ===")
         return
     
-    print("1 - Alterar nome | 2 - Alterar responsavel | 3 - Alterar ip")
+    print("1 - Alterar nome | 2 - Alterar responsável | 3 - Alterar ip")
     print("4 - Alterar tipo | 5 - Remover ativo")
     opcao = input("SELECIONE UM DOS NUMEROS ACIMA: ")
     if opcao in ["1", "2", "3","4"]:
@@ -117,7 +118,7 @@ def editar_remover_ativo(ativos):
             return
         if opcao == "1":
             if novo_valor == ativo["nome"]:
-                print("=== VALOR JA PREVIAMENTE CADASTRADO ===")
+                print("=== VALOR JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo ["nome"] = novo_valor
         
@@ -211,7 +212,6 @@ def visualizar_vuln(ativos):
         numero += 1
 
 def editar_remover_vuln(ativos):
-
     ativo = buscar_ativo( ativos, input("=== DIGITE O ID DO ATIVO: ").strip())
     if buscar_ativo is None:
         print("ATIVO NAO ENCONTRADO")
@@ -316,6 +316,4 @@ def Interface_menu (ativos):
 
 ativos = carregar_ativos()
 Interface_menu(ativos)
-
-
 # DISCLAMER: esse código foi feito com o auxílio de inteligencia artificial(gemini, e chatgpt) foram utilizadas como forma de aprendizado e estudo, o código nao foi feito totalmente e nem copiado pela ia, e sim utilizada como auxílio na formaçao do código.

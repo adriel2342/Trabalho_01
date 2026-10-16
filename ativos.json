@@ -1,31 +1,11 @@
 [
     {
         "ativo": [],
-<<<<<<< HEAD
-        "id": "2",
-        "nome": "roteador-laboratorio-01",
-        "responsavel": "ADRIEL",
-        "ip": "192.168.100.1",
-        "tipo": "roteador",
-<<<<<<< HEAD
-        "vulnerabilidades": []
-=======
-        "vulnerabilidades": [
-            {
-                "descricao": "rotweador com firewall desuatualizado",
-                "categoria": "roteador",
-                "severidade": "alta",
-                "status": "aberta"
-            }
-        ]
->>>>>>> melhoria
-=======
         "id": "1",
-        "nome": "SERVIDOR-WEB-01",
-        "responsavel": "adriel",
-        "ip": "192.0.2.1",
-        "tipo": "servidor Web",
+        "nome": "PC-FINANCEIRO-01",
+        "responsavel": "ADRIEL",
+        "ip": "192.168.100.10",
+        "tipo": "notebook",
         "vulnerabilidades": []
->>>>>>> feature-confirmacao
     }
 ]
