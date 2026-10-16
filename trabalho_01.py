@@ -120,14 +120,10 @@ def editar_remover_ativo(ativos):
             else:
                 ativo ["responsavel"] = novo_valor
         elif opcao == "3":
-<<<<<<< HEAD
-            ativo["ip"] = novo_valor
-=======
             if novo_valor == ativo["ip"]:
                 print("=== VAL0R JÁ PREVIAMENTE CADASTRADO ===")
             else:
                 ativo["ip"] = novo_valor
->>>>>>> melhoria
         elif opcao == "4":
            if novo_valor not in TIPOS_ATIVOS:
                 print("=== TIPO INVÁLIDO ===")
