@@ -157,10 +157,77 @@ def cadastrar_vuln(ativos):
     print("=== VULNERABILIDADE CADASTRADA ===.")
 
 def visualizar_vuln(ativos):
-    pass
+    ativo = buscar_ativo(ativos, input("=== DIGITE O ID DO ATIVO:  ").strip())
+    if buscar_ativo is None:
+        print("=== ATIVO NAO ENCONTRADO ===")
+        return
+    if not ativo["vulnerabilidades"]:
+        print("=== ESSE ATIVO NÃO POSSUI VULNERABILIDADES ===")
+        return
+    numero = 1
+    for vuln in ativo["vulnerabilidades"]:
+        print("\nVulnerabilidade", numero, "-", vuln["descricao"])
+        print("Categoria:", vuln["categoria"], "| Severidade:", vuln["severidade"], "| Status:", vuln["status"])
+        numero += 1
 
 def editar_remover_vuln(ativos):
-    pass
+    ativo = buscar_ativo( ativos, input("=== DIGITE O ID DO ATIVO: ").strip())
+    if buscar_ativo is None:
+        print("ATIVO NAO ENCONTRADO")
+        return
+    vulnerabilidades = ativo["vulnerabilidade"]
+    if not vulnerabilidades:
+        print("=== NAO HA VULNERABILIDADES REFERENTES A ESSE ATIVO ===")
+        return
+    numero = 1
+    for vuln in vulnerabilidades:
+        print(numero, "-", vuln["descricao"])
+        numero += 1
+        numero = input("Número da vulnerabilidade: ")
+    if numero < 1 or numero > len(vulnerabilidades):
+        print("Número inválido.")
+        return
+    vuln = vulnerabilidades[numero - 1] 
+
+    print("1 - Alterar descrição | 2 - Alterar categoria")
+    print("3 - Alterar severidade | 4 - Alterar status | 5 - Remover")
+    opcao = input("Escolha: ").strip()
+    if opcao in ["1", "2", "3", "4"]: 
+        novo_valor = input("=== NOVO VALOR: ").strip()
+        if not novo_valor:
+            print("=== O VALOR NAO PODE FICAR EM BRANCO ===")
+            return
+        if opcao == "1":
+            vuln ["descricao"] = novo_valor
+
+        elif opcao == "2":
+            vuln ["categoria"] = novo_valor
+
+        elif opcao == "3":
+            
+            if novo_valor .lower() not in SEVERIDADE:
+                print("=== SEVERIDADE INVALIDA ===")
+                return
+            vuln["severidade"] = novo_valor
+
+        elif opcao == "4":
+            
+            if novo_valor .lower() not in STATUS:
+                print("=== STATUS INVALIDO ===")
+                return
+            vuln ["status"] = novo_valor
+        salvar_ativo(ativos)
+        print ("=== VULNERABILIDADE MODIFICADA ===")
+
+    elif opcao == "5":
+        if input("=== CONFIRMA A REMOCAO? (s/n): ").strip().lower() == "s":
+            vulnerabilidades.remove(vuln)
+            print("=== VULNERABILIDADE REMOVIDA ===")
+        else:
+            print("=== REMOCAO CANCELADA ===")
+    else: 
+        print("=== OPCAO INVALIDA ===")
+            
 
 #opcoes mostradas do que o usuario tera    
 def Interface_menu (ativos):
@@ -188,7 +255,7 @@ def Interface_menu (ativos):
         elif escolha_usuario == "6":
             editar_remover_vuln (ativos)
         elif escolha_usuario == "0":
-            print("PROGRAMA ENCERRADO")
+            print("=== PROGRAMA ENCERRADO ===")
             break
         else:
             print("opcao invalida selecione de 0 a 6")
@@ -197,3 +264,6 @@ ativos = carregar_ativos()
 Interface_menu(ativos)
 
 
+# DISCLAMER: esse código foi feito com o auxílio de inteligencia artificial(gemini, e chatgpt) foram utilizadas como forma de aprendizado e estudo, o código nao foi feito totalmente e nem copiado pela ia, e sim utilizada como auxílio na formaçao do código.
+
+          
